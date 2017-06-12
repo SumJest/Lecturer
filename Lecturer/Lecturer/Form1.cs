@@ -17,6 +17,10 @@ namespace Lecturer
         public Form1()
         {
             InitializeComponent();
+            ToolTip t = new ToolTip();
+            t.SetToolTip(pictureBox1, "Задержка расчитывается по следующей строчке");
+            t.SetToolTip(pictureBox2, "Задержка расчитывается по предыдущей строчке");
+            radioButton1.Checked = true;
         }
         long size;
 
@@ -34,18 +38,34 @@ namespace Lecturer
             if (string.IsNullOrEmpty(textBox4.Text)) { MessageBox.Show("Введите команду, по которой будет срабатывать скрипт!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             List<string> list = new List<string>();
             list.Add(":?:" + textBox4.Text + "::");
-            list.Add("Sleep, 1000");
-            for (int i = 0; i<textBox1.Lines.Length; i++)
+            if (radioButton1.Checked) list.Add("Sleep, " + Math.Round(Double.Parse(textBox1.Lines[1].Replace(" ", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("?", "").Replace(";", "").Replace(":", "").Length.ToString()) / Speed * 1000));
+            else { list.Add("Sleep, " + 1000); }
+            if (checkBox1.Checked)
             {
-                
-                double Lenght = Double.Parse(textBox1.Lines[i].Replace(" ", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("?", "").Replace(";", "").Replace(":", "").Length.ToString());
-                double Time = default(double);
-                Time = Lenght / Speed * 1000;
-                if (Time < 1000) { Time = 1200; }
-                
-                list.Add("SendInput {f6}" + textBox1.Lines[i].Replace("!", "{!}") + "{Enter}");
-                if (i == textBox1.Lines.Length - 1) { list.Add("Sleep, " + 1000); }
-                else { list.Add("Sleep, " + Math.Round(Time)); }
+                for (int i = 0; i < textBox1.Lines.Length; i++)
+                {
+                    list.Add("SendChat(\"" + textBox1.Lines[i].Replace("!", "{!}") + "\")");
+                    if (i == textBox1.Lines.Length - 1) { list.Add("Sleep, " + 1000); break; }
+                    double Lenght = radioButton1.Checked ? Double.Parse(textBox1.Lines[i + 1].Replace(" ", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("?", "").Replace(";", "").Replace(":", "").Length.ToString()) : Double.Parse(textBox1.Lines[i].Replace(" ", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("?", "").Replace(";", "").Replace(":", "").Length.ToString());
+                    double Time = default(double);
+                    Time = Lenght / Speed * 1000;
+                    if (Time < 1000) { Time = 1200; }
+                    else { list.Add("Sleep, " + Math.Round(Time)); }
+                }
+            } else {
+                for (int i = 0; i < textBox1.Lines.Length; i++)
+                {
+
+
+
+                    list.Add("SendInput {f6}" + textBox1.Lines[i].Replace("!", "{!}") + "{Enter}");
+                    if (i == textBox1.Lines.Length - 1) { list.Add("Sleep, " + 1000); break; }
+                    double Lenght = radioButton1.Checked ? Double.Parse(textBox1.Lines[i + 1].Replace(" ", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("?", "").Replace(";", "").Replace(":", "").Length.ToString()) : Double.Parse(textBox1.Lines[i].Replace(" ", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("?", "").Replace(";", "").Replace(":", "").Length.ToString());
+                    double Time = default(double);
+                    Time = Lenght / Speed * 1000;
+                    if (Time < 1000) { Time = 1200; }
+                    else { list.Add("Sleep, " + Math.Round(Time)); }
+                }
             }
             list.Add("Return");
             textBox3.Lines = list.ToArray(); 

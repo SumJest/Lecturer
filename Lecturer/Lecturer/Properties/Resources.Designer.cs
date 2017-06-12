@@ -63,6 +63,16 @@ namespace Lecturer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap sign_question_icon_34359 {
+            get {
+                object obj = ResourceManager.GetObject("sign-question-icon_34359", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap site_logo {
             get {
                 object obj = ResourceManager.GetObject("site-logo", resourceCulture);
